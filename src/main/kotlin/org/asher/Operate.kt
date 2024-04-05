@@ -1,6 +1,8 @@
 package org.asher
 
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import java.io.File
 
 fun showCodes(password: String, filename: String) {
     val content = loadFile(filename, password)
@@ -21,5 +23,19 @@ fun showContent(password: String, filename: String) {
 
 fun saveContent(password: String, filename: String, content: String) {
     saveFile(content, filename, password)
+}
+
+fun addKey(password: String, filename: String, host: String, key: String) {
+    val gson = GsonBuilder().setPrettyPrinting().create()
+    val siteToKey = if (File(filename).exists()) {
+        val content = loadFile(filename, password)
+        gson.fromJson<LinkedHashMap<String, String>>(content, LinkedHashMap::class.java)
+    }
+    else {
+        LinkedHashMap<String, String>()
+    }
+    siteToKey[host] = key
+    val newContent = gson.toJson(siteToKey)
+    saveContent(password, filename, newContent)
 }
 

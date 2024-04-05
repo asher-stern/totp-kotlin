@@ -1,3 +1,4 @@
+import org.asher.addKey
 import org.asher.saveContent
 import org.asher.showCodes
 import org.asher.showContent
@@ -10,8 +11,9 @@ val HELP = """
     
     Second argument:
     empty: show codes.
-    save: encrypt the content given by the third argument.
+    save: [JSON file] encrypt the content given by the third argument.
     show: show encrypted content
+    add: [host key] add the key for the host
     """.trimIndent()
 
 fun main(args: Array<String>) {
@@ -36,6 +38,13 @@ fun main(args: Array<String>) {
         }
         "show" -> {
             showContent(password, filename)
+        }
+        "add" -> {
+            if (args.size < 4) {
+                println(HELP)
+                exitProcess(0)
+            }
+            addKey(password, filename, args[2], args[3])
         }
         else -> {
             println(HELP)

@@ -16,6 +16,16 @@ val HELP = """
     add: [host key] add the key for the host
     """.trimIndent()
 
+
+fun verifyPassword(password: String) {
+    println("Enter password again:")
+    val passwordAgain = String(System.console().readPassword())
+    if (passwordAgain != password) {
+        println("Passwords not identical.")
+        exitProcess(0)
+    }
+}
+
 fun main(args: Array<String>) {
     if (args.isEmpty()) {
         println(HELP)
@@ -33,6 +43,7 @@ fun main(args: Array<String>) {
         }
         "save" -> {
             val contentFileName = args[2]
+            verifyPassword(password)
             val content = File(contentFileName).readText()
             saveContent(password, filename, content)
         }
@@ -44,6 +55,7 @@ fun main(args: Array<String>) {
                 println(HELP)
                 exitProcess(0)
             }
+            verifyPassword(password)
             addKey(password, filename, args[2], args[3])
         }
         else -> {
